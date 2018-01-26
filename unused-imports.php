@@ -14,6 +14,9 @@ if (!is_string($rootDir) || !is_dir($rootDir)) {
 
 $filenameGenerator = recurseFiles($rootDir);
 
+$fileCount = 0;
+$unusedImportCount = 0;
+
 foreach ($filenameGenerator as $filename) {
     $matchCount = preg_match('/\.jsx?$/', $filename);
 
@@ -41,9 +44,15 @@ foreach ($filenameGenerator as $filename) {
         continue;
     }
 
+    $fileCount++;
+    $unusedImportCount += count($unusedImports);
+
     $unusedImportsString = implode(', ', $unusedImports);
-    echo "\n$filename\n$unusedImportsString\n\n";
+    echo "$filename > $unusedImportsString\n";
 }
+
+echo "\nTotal number of files with unused imports: $fileCount\n";
+echo "Total number of unused imports from all files: $unusedImportCount\n";
 
 exit(0);
 
@@ -51,7 +60,7 @@ exit(0);
 function getUnusedImports($es6source)
 {
     // first match all the import lines
-    $matchCount = preg_match_all('/^\s*(import.+)$/m', $es6source, $matches);
+    $matchCount = preg_match_all('/^\s*(import[\sA-Za-z0-9_\{\,\}]+from.+;)\s*$/m', $es6source, $matches);
 
     if ($matchCount === false) {
         trigger_error('bad regex'); // legit error handling
@@ -105,7 +114,7 @@ function recurseFiles($path)
 {
     foreach (glob("$path/*") as $idx => $filename) {
         if (is_dir($filename) && $filename != '..') {
-            recurseFiles($filename);
+            yield from recurseFiles($filename);
         } else {
             yield $filename;
         }
