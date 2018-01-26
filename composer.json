@@ -1,0 +1,18 @@
+{
+    "name": "alex/unused-es6-imports",
+    "description": "Detects unused headers for es6",
+    "type": "cli",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alex Morley-Finch",
+            "email": "alexmorleyfinch@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-0": {
+            "Alex": "src/"
+        }
+    }
+}
