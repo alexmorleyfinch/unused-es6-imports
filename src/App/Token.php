@@ -3,45 +3,28 @@
 namespace Almofi\UnusedEs6Imports\App;
 
 class Token {
-    const T_IDENT = 1;
-    const T_KEYWORD = 2;
-    const T_STR_LIT = 3;
+    const T_CONTROL = 1;
+    const T_LITERAL = 2;
+    const T_IDENTIFIER = 3;
 
-    const T_OPEN = 4;
-    const T_CLOSE = 5;
-    const T_COMMA = 6;
-    const T_STAR = 7;
-    const T_CONTROL = 8;
-
-    public $value;
     public $type;
+    public $value;
 
-    private static $map = [
-        '{' => Token::T_OPEN,
-        '}' => Token::T_CLOSE,
-        ',' => Token::T_COMMA,
-        '*' => Token::T_STAR,
-    ];
-
-    public function __construct(string $value, $type = Token::T_IDENT)
+    public function __construct(string $value, int $type)
     {
-        $this->value = $value;
-
-        if ($type === Token::T_CONTROL) {
-            $type = $this->classify($value);
-        }
         $this->type = $type;
+        $this->value = $value;
     }
 
     public function equals(Token $token) {
         return $this->type == $token->type && $this->value == $token->value;
     }
 
-    public function isControl(string $word) {
-        return $this->value === $word && $this->type === self::T_KEYWORD;
+    public function equalsType(int $type) {
+        return $this->type == $type;
     }
 
-    public function classify($value) {
-        return self::$map[$value];
+    public function isControl(string $word) {
+        return $this->value === $word && $this->type === self::T_CONTROL;
     }
 }

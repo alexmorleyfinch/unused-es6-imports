@@ -20,7 +20,7 @@ $passCases = [
 $failCases = [
 ];
 
-$parser = new \App\ImportStatementParser();
+$parser = new Almofi\UnusedEs6Imports\App\ImportStatementParser();
 
 foreach ($passCases as $code => $expecting) {
     $parser->reset($code);

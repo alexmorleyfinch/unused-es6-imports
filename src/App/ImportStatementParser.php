@@ -25,24 +25,24 @@ class ImportStatementParser extends Parser
 
         $token = $this->tokeniser->nextToken();
 
-        $this->expect('import', $token);
+        $this->expectControl('import', $token);
 
         // don't judge a lazy man okay, this one teeny tiny goto won't hurt anybody
         label:
 
         $token = $this->tokeniser->nextToken();
 
-        if ($token->type == Token::T_IDENT) {
+        if ($token->equalsType(Token::T_IDENTIFIER)) {
             $this->importStatement->setDefaultImport($token->value);
-        } else if ($token->type == Token::T_OPEN) {
+        } else if ($token->isControl('{')) {
             $this->parseNamedImports($this->tokeniser);
 
             // by now we have consumed the close tag '}'
-        } else if ($token->type === Token::T_STAR) {
-            $this->expectKeyword('as', $this->tokeniser->nextToken());
+        } else if ($token->isControl('*')) {
+            $this->expectControl('as', $this->tokeniser->nextToken());
 
             $aliasToken = $this->tokeniser->nextToken();
-            $this->expectType(Token::T_IDENT, $aliasToken);
+            $this->expectType(Token::T_IDENTIFIER, $aliasToken);
             $this->importStatement->setAllAlias($aliasToken->value);
         } else {
             throw new ParseError('Expected an identifier, an alias or a grouping');
@@ -51,7 +51,7 @@ class ImportStatementParser extends Parser
         $token = $this->tokeniser->nextToken();
 
         // could have comma or 'from'
-        if ($token->type === Token::T_COMMA) {
+        if ($token->isControl(',')) {
             // do this shit again bitch!
 
             goto label; // just ignore this for now *cough cough*
@@ -69,7 +69,7 @@ class ImportStatementParser extends Parser
     private function parseNamedImports($tokeniser)
     {
         $token = $this->tokeniser->nextToken();
-        $this->expectType(Token::T_IDENT, $token);
+        $this->expectType(Token::T_IDENTIFIER, $token);
         $name = $token->value; // remember, could be an `export` or `alias`
 
         // we need to check the next token before we can classify the T_IDENT we have
@@ -78,7 +78,7 @@ class ImportStatementParser extends Parser
         if ($token->isControl('as')) {
             $aliasToken = $this->tokeniser->nextToken();
 
-            $this->expectType(Token::T_IDENT, $aliasToken);
+            $this->expectType(Token::T_IDENTIFIER, $aliasToken);
 
             $this->importStatement->addNamedImport($name, $aliasToken->value);
 
@@ -88,9 +88,9 @@ class ImportStatementParser extends Parser
             $this->importStatement->addNamedImport($name);
         }
 
-        if ($token->type === Token::T_COMMA) {
+        if ($token->isControl(',')) {
             return $this->parseNamedImports($tokeniser);
-        } else if ($token->type == Token::T_CLOSE) {
+        } else if ($token->isControl('}')) {
             return null;
         } else {
             throw new ParseError('Expecting a comma, a closing brace or the "as" keyword');

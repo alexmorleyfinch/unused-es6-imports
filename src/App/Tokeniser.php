@@ -2,6 +2,8 @@
 
 namespace Almofi\UnusedEs6Imports\App;
 
+// TODO detect string literal
+
 class Tokeniser
 {
     private $string;
@@ -27,7 +29,7 @@ class Tokeniser
         $this->source = $importString;
     }
 
-    public function nextToken()
+    public function nextToken(): ?Token
     {
         $this->skipSpaces();
 
@@ -46,7 +48,7 @@ class Tokeniser
         return $this->buildString($nextChar);
     }
 
-    private function buildString($firstChr)
+    private function buildString($firstChr): Token
     {
         $this->string = $firstChr;
         $this->position++; // we already have the first character;
@@ -63,10 +65,10 @@ class Tokeniser
         }
 
         if (in_array($this->string, $this->controlWords)) {
-            return new Token($this->string, Token::T_KEYWORD);
+            return new Token($this->string, Token::T_CONTROL);
         }
 
-        return new Token($this->string);
+        return new Token($this->string, TOKEN::T_IDENTIFIER);
     }
 
     private function skipSpaces()

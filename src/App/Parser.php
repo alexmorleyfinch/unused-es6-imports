@@ -32,12 +32,12 @@ abstract class Parser
 
     protected function expectType(int $type, Token $token)
     {
-        if ($type !== $token->type) {
+        if (!$token->equalsType($type)) {
             throw new ParseError("Expecting type $type");
         }
     }
 
-    protected function expectKeyword(string $word, Token $token)
+    protected function expectControl(string $word, Token $token)
     {
         if (!$token->isControl($word)) {
             throw new ParseError("Expecting keyword $word");
