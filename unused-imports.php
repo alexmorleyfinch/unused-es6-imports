@@ -9,7 +9,8 @@ define('OUTPUT', 'BASIC');
 $rootDir = $argv[1] ?? null;
 
 if (!is_string($rootDir) || !is_dir($rootDir)) {
-    exit("Look, I'm not magic. You should pass a valid directory");
+    fwrite(STDERR, "Look, I'm not magic. You should pass a valid directory"); //output message into 2> buffer
+    exit(1); //return error status code to shell
 }
 
 $unusedImportGenerator = new Alex\UnusedImportGenerator();

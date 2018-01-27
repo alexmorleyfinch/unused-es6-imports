@@ -5,6 +5,7 @@ namespace Alex;
 
 class UnusedImportGenerator
 {
+    private $unusedDetector;
     private $filenameGenerator;
 
     public function __construct()
@@ -18,8 +19,6 @@ class UnusedImportGenerator
         $generator = $this->filenameGenerator->recurseFiles($rootDir);
 
         foreach ($generator as $filename) {
-//            verbose("Testing $filename.");
-
             $es6source = file_get_contents($filename);
 
             if ($es6source === false) {
@@ -31,22 +30,14 @@ class UnusedImportGenerator
             $importStatements = $this->unusedDetector->matchImportStatements($es6source);
 
             if (!$importStatements) {
-//                verbose("No imports found");
                 continue;
             }
 
-            $importCount = count($importStatements);
-//            verbose("Found $importCount import lines");
-
             $importNames = $this->unusedDetector->getImportIdentifiers($importStatements);
-
-            $importNamesString = implode(' || ', $importNames);
-//            verbose("Found $importCount imports: $importNamesString");
 
             $unusedImports = $this->unusedDetector->getUnusedIdentifiers($es6source, $importNames);
 
             if (empty($unusedImports)) {
-//                verbose('All imports used');
                 continue;
             }
 

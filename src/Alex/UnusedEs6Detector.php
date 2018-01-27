@@ -5,7 +5,7 @@ namespace Alex;
 
 class UnusedEs6Detector
 {
-    public function matchImportStatements($es6source)
+    public function matchImportStatements(string $es6source): ?array
     {
         $matchCount = preg_match_all('/^\s*(import[\sA-Za-z0-9_\{\,\}]+from.+;)\s*$/m', $es6source, $matches);
 
@@ -21,10 +21,10 @@ class UnusedEs6Detector
         return $matches[0];
     }
 
-    public function getImportIdentifiers($importStatements)
+    public function getImportIdentifiers(array $importStatements): array
     {
         $importNames = [];
-        $parser = new \Alex\ImportStatementParser();
+        $parser = new ImportStatementParser();
 
         foreach ($importStatements as $idx => $importCode) {
             $parser->reset($importCode);
@@ -35,7 +35,7 @@ class UnusedEs6Detector
         return $importNames;
     }
 
-    public function getUnusedIdentifiers($es6source, $importNames)
+    public function getUnusedIdentifiers(string $es6source, array $importNames): array
     {
         $unusedImports = [];
         foreach ($importNames as $importName) {
