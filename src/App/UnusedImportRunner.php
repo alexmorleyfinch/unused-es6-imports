@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex;
+namespace App;
 
 class UnusedImportRunner
 {
@@ -18,7 +18,7 @@ class UnusedImportRunner
         $this->generator = $unusedImportGenerator->generateUnusedImportIdentifiers($rootDir);
     }
 
-    public function streamOutput(resource $stream, callable $toString)
+    public function streamOutput($stream, callable $toString)
     {
         $fileCount = 0;
         $unusedImportCount = 0;
@@ -27,11 +27,11 @@ class UnusedImportRunner
             $fileCount++;
             $unusedImportCount += count($result['unusedIdentifiers']);
 
-            fwrite($stream, $toString($result));
+            fwrite($stream, $toString($result) . "\n");
         }
 
-        fwrite($stream, "\nTotal number of files with unused imports: $fileCount");
-        fwrite($stream,"Total number of unused imports from all files: $unusedImportCount");
+        fwrite($stream, "\nTotal number of files with unused imports: $fileCount\n");
+        fwrite($stream,"Total number of unused imports from all files: $unusedImportCount\n");
     }
 
     public function synchronousOutput()

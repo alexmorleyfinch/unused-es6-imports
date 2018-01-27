@@ -1,5 +1,5 @@
 <?php
 
-namespace Alex;
+namespace App;
 
 class ParseError extends \Exception {}

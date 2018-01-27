@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex;
+namespace App;
 
 class ImportStatement {
     private $defaultImport; // you can only have one default import per statement

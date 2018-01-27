@@ -11,7 +11,7 @@ if (!is_string($rootDir) || !is_dir($rootDir)) {
     exit(1); //return error status code to shell
 }
 
-$unusedImportsRunner = new Alex\UnusedImportRunner($rootDir);
+$unusedImportsRunner = new App\UnusedImportRunner($rootDir);
 
 if ($useJson) {
     $jsonData = $unusedImportsRunner->synchronousOutput();
@@ -21,7 +21,7 @@ if ($useJson) {
     $unusedImportsRunner->streamOutput(STDOUT, function($result) {
         $unusedImportsString = implode(', ', $result['unusedIdentifiers']);
 
-        return "{$result['filename']} > $unusedImportsString\n";
+        return "{$result['filename']} > $unusedImportsString";
     });
 }
 

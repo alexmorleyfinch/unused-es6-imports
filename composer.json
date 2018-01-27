@@ -1,6 +1,6 @@
 {
     "name": "alex/unused-es6-imports",
-    "description": "Detects unused headers for es6",
+    "description": "giDetects unused headers for es6",
     "type": "cli",
     "license": "MIT",
     "authors": [
@@ -12,7 +12,7 @@
     "require": {},
     "autoload": {
         "psr-0": {
-            "Alex": "src/"
+            "App": "src/"
         }
     }
 }

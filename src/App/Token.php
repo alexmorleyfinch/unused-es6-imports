@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex;
+namespace App;
 
 class Token {
     const T_IDENT = 1;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Alex;
+namespace App;
 
 class Tokeniser
 {

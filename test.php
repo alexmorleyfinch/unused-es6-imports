@@ -20,7 +20,7 @@ $passCases = [
 $failCases = [
 ];
 
-$parser = new \Alex\ImportStatementParser();
+$parser = new \App\ImportStatementParser();
 
 foreach ($passCases as $code => $expecting) {
     $parser->reset($code);
