@@ -51,48 +51,23 @@ exit(0);
 // returns array of unused import strings, or null if none could be found
 function getUnusedImports($es6source)
 {
-    // first match all the import lines
-    $matchCount = preg_match_all('/^\s*(import[\sA-Za-z0-9_\{\,\}]+from.+;)\s*$/m', $es6source, $matches);
+    $unusedDetector = new Alex\UnusedEs6Detector();
 
-    if ($matchCount === false) {
-        trigger_error('bad regex'); // legit error handling
-        return null;
-    }
+    $importStatements = $unusedDetector->matchImportStatements($es6source);
 
-    if ($matchCount < 0) {
+    if (!$importStatements) {
         verbose("No imports found");
-        return null;
     }
 
-    $importLines = $matches[0];
-    $importCount = count($importLines);
-
+    $importCount = count($importStatements);
     verbose("Found $importCount import lines");
 
-    $importNames = [];
-    $parser = new \Alex\ImportStatementParser();
-
-    foreach ($importLines as $idx => $importCode) {
-        $parser->reset($importCode);
-        $importNames = array_merge($importNames, $parser->getImportIdentifiers());
-    }
+    $importNames = $unusedDetector->getImportIdentifiers($importStatements);
 
     $importNamesString = implode(' || ', $importNames);
     verbose("Found $importCount imports: $importNamesString");
 
-    $unusedImports = [];
-    foreach ($importNames as $importName) {
-        $matchCount = preg_match_all('/\\b' . preg_quote($importName) . '\\b/', $es6source);
-
-        if ($matchCount === false) {
-            trigger_error('bad regex');
-            continue;
-        }
-
-        if ($matchCount === 1) {
-            $unusedImports [] = $importName;
-        }
-    }
+    $unusedImports = $unusedDetector->getUnusedIdentifiers($es6source, $importNames);
 
     if (empty($unusedImports)) {
         verbose('All imports used');
