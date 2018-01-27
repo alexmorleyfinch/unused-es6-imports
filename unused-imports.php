@@ -1,12 +1,12 @@
 <?php
+
 require __DIR__ . '/vendor/autoload.php';
 
-// echos unused imports one file at a time as we find them. no output for good files
+$options = getopt('f:j::');
+$rootDir = $options['f'] ?? null;
+$useJson = ($options['j'] ?? null) === false;
 
-error_reporting(E_ALL);
-define('OUTPUT', 'BASIC');
-
-$rootDir = $argv[1] ?? null;
+define('OUTPUT', $useJson ? 'JSON' : 'BASIC');
 
 if (!is_string($rootDir) || !is_dir($rootDir)) {
     fwrite(STDERR, "Look, I'm not magic. You should pass a valid directory"); //output message into 2> buffer
