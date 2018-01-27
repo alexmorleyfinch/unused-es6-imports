@@ -23,13 +23,6 @@ abstract class Parser
         $this->parse();
     }
 
-    protected function expect(string $value, Token $token)
-    {
-        if ($value !== $token->value) {
-            throw new ParseError("Expecting $value");
-        }
-    }
-
     protected function expectType(int $type, Token $token)
     {
         if (!$token->equalsType($type)) {

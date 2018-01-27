@@ -7,13 +7,17 @@ class Token {
     const T_LITERAL = 2;
     const T_IDENTIFIER = 3;
 
-    public $type;
-    public $value;
+    private $type;
+    private $value;
 
     public function __construct(string $value, int $type)
     {
         $this->type = $type;
         $this->value = $value;
+    }
+
+    public function getValue() {
+        return $this->value;
     }
 
     public function equals(Token $token) {

@@ -33,7 +33,7 @@ class ImportStatementParser extends Parser
         $token = $this->tokeniser->nextToken();
 
         if ($token->equalsType(Token::T_IDENTIFIER)) {
-            $this->importStatement->setDefaultImport($token->value);
+            $this->importStatement->setDefaultImport($token->getValue());
         } else if ($token->isControl('{')) {
             $this->parseNamedImports($this->tokeniser);
 
@@ -43,7 +43,7 @@ class ImportStatementParser extends Parser
 
             $aliasToken = $this->tokeniser->nextToken();
             $this->expectType(Token::T_IDENTIFIER, $aliasToken);
-            $this->importStatement->setAllAlias($aliasToken->value);
+            $this->importStatement->setAllAlias($aliasToken->getValue());
         } else {
             throw new ParseError('Expected an identifier, an alias or a grouping');
         }
@@ -60,7 +60,7 @@ class ImportStatementParser extends Parser
             // right now we know the tokeniser is shit and classifies the "module-name"; as a T_REF, and that's okay
             $token = $this->tokeniser->nextToken();
 
-            $this->importStatement->setDependancyName($token->value);
+            $this->importStatement->setDependancyName($token->getValue());
         } else {
             throw new ParseError('Expected a comma or the "from" keyword');
         }
@@ -70,7 +70,7 @@ class ImportStatementParser extends Parser
     {
         $token = $this->tokeniser->nextToken();
         $this->expectType(Token::T_IDENTIFIER, $token);
-        $name = $token->value; // remember, could be an `export` or `alias`
+        $name = $token->getValue(); // remember, could be an `export` or `alias`
 
         // we need to check the next token before we can classify the T_IDENT we have
         $token = $this->tokeniser->nextToken();
@@ -80,7 +80,7 @@ class ImportStatementParser extends Parser
 
             $this->expectType(Token::T_IDENTIFIER, $aliasToken);
 
-            $this->importStatement->addNamedImport($name, $aliasToken->value);
+            $this->importStatement->addNamedImport($name, $aliasToken->getValue());
 
             // set up next token after alias
             $token = $this->tokeniser->nextToken();
