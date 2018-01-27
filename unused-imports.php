@@ -12,22 +12,14 @@ if (!is_string($rootDir) || !is_dir($rootDir)) {
     exit("Look, I'm not magic. You should pass a valid directory");
 }
 
-$filenameGenerator = recurseFiles($rootDir);
+$filenameGenerator = new Alex\FilenameGenerator('/\.jsx?$/', true);
+
+$generator = $filenameGenerator->recurseFiles($rootDir);
 
 $fileCount = 0;
 $unusedImportCount = 0;
 
-foreach ($filenameGenerator as $filename) {
-    $matchCount = preg_match('/\.jsx?$/', $filename);
-
-    if (!$matchCount) {
-        if ($matchCount === false) {
-            trigger_error('Regex error');
-        }
-
-        verbose("Skipping $filename");
-        continue;
-    }
+foreach ($generator as $filename) {
 
     verbose("Testing $filename.");
 
@@ -108,17 +100,6 @@ function getUnusedImports($es6source)
     }
 
     return $unusedImports;
-}
-
-function recurseFiles($path)
-{
-    foreach (glob("$path/*") as $idx => $filename) {
-        if (is_dir($filename) && $filename != '..') {
-            yield from recurseFiles($filename);
-        } else {
-            yield $filename;
-        }
-    }
 }
 
 function verbose($msg)
