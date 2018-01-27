@@ -4,13 +4,14 @@ require __DIR__ . '/vendor/autoload.php';
 
 use \Almofi\UnusedEs6Imports\App;
 
+// requires -f arg as filename and optional -j to enable json output
 $options = getopt('f:j::');
 $rootDir = $options['f'] ?? null;
 $useJson = ($options['j'] ?? null) === false;
 
 if (!is_string($rootDir) || !is_dir($rootDir)) {
     fwrite(STDERR, "Look, I'm not magic. You should pass a valid directory");
-    exit(1); //return error status code to shell
+    exit(1);
 }
 
 $unusedImportsRunner = new App\UnusedImportRunner($rootDir);
