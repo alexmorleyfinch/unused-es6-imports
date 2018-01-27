@@ -19,6 +19,7 @@ class ImportStatementParser extends Parser
         return $this->importStatement->getNamedImports();
     }
 
+    // called from parent when `reset`
     protected function parse()
     {
         $this->importStatement = new ImportStatement();
@@ -27,9 +28,10 @@ class ImportStatementParser extends Parser
 
         $this->expectControl('import', $token);
 
-        // don't judge a lazy man okay, this one teeny tiny goto won't hurt anybody
-        label:
+        $this->recursiveParse();
+    }
 
+    private function recursiveParse() {
         $token = $this->tokeniser->nextToken();
 
         if ($token->equalsType(Token::T_IDENTIFIER)) {
@@ -54,7 +56,7 @@ class ImportStatementParser extends Parser
         if ($token->isControl(',')) {
             // do this shit again bitch!
 
-            goto label; // just ignore this for now *cough cough*
+            $this->recursiveParse();
         } else if ($token->isControl('from')) {
             // an end is in sight!!!
             // right now we know the tokeniser is shit and classifies the "module-name"; as a T_REF, and that's okay
