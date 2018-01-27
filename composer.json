@@ -11,8 +11,9 @@
     ],
     "require": {},
     "autoload": {
-        "psr-0": {
-            "App": "src/"
+        "psr-4": {
+            "Almofi\\UnusedEs6Imports\\": "src/",
+            "Almofi\\UnusedEs6Imports\\Tests\\": "tests/"
         }
     }
 }

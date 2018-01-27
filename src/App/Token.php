@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Almofi\UnusedEs6Imports\App;
 
 class Token {
     const T_IDENT = 1;

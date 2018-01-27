@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Almofi\UnusedEs6Imports\App;
 
 class ImportStatement {
     private $defaultImport; // you can only have one default import per statement

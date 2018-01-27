@@ -1,6 +1,8 @@
 <?php
 
-namespace App;
+namespace Almofi\UnusedEs6Imports\App;
+
+use Almofi\UnusedEs6Imports\Utils\FilenameGenerator;
 
 class UnusedImportGenerator
 {

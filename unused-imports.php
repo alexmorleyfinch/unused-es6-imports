@@ -2,6 +2,8 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use \Almofi\UnusedEs6Imports\App;
+
 $options = getopt('f:j::');
 $rootDir = $options['f'] ?? null;
 $useJson = ($options['j'] ?? null) === false;
