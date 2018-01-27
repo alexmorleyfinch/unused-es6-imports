@@ -55,7 +55,7 @@ class ImportStatementParser extends Parser
             // do this shit again bitch!
 
             goto label; // just ignore this for now *cough cough*
-        } else if ($token->isKeyword('from')) {
+        } else if ($token->isControl('from')) {
             // an end is in sight!!!
             // right now we know the tokeniser is shit and classifies the "module-name"; as a T_REF, and that's okay
             $token = $this->tokeniser->nextToken();
@@ -75,7 +75,7 @@ class ImportStatementParser extends Parser
         // we need to check the next token before we can classify the T_IDENT we have
         $token = $this->tokeniser->nextToken();
 
-        if ($token->isKeyword('as')) {
+        if ($token->isControl('as')) {
             $aliasToken = $this->tokeniser->nextToken();
 
             $this->expectType(Token::T_IDENT, $aliasToken);

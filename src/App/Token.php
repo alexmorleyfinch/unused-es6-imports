@@ -37,7 +37,7 @@ class Token {
         return $this->type == $token->type && $this->value == $token->value;
     }
 
-    public function isKeyword(string $word) {
+    public function isControl(string $word) {
         return $this->value === $word && $this->type === self::T_KEYWORD;
     }
 

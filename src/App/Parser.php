@@ -39,7 +39,7 @@ abstract class Parser
 
     protected function expectKeyword(string $word, Token $token)
     {
-        if (!$token->isKeyword($word)) {
+        if (!$token->isControl($word)) {
             throw new ParseError("Expecting keyword $word");
         }
     }
