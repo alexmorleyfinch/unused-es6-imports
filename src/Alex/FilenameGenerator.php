@@ -29,7 +29,6 @@ class FilenameGenerator
                     if ($matchCount === false) {
                         trigger_error('Regex error');
                     }
-
                     continue;
                 }
             }

@@ -4,7 +4,7 @@ require __DIR__ . '/vendor/autoload.php';
 // echos unused imports one file at a time as we find them. no output for good files
 
 error_reporting(E_ALL);
-define('VERBOSE', !true);
+define('OUTPUT', 'BASIC');
 
 $rootDir = $argv[1] ?? null;
 
@@ -12,72 +12,43 @@ if (!is_string($rootDir) || !is_dir($rootDir)) {
     exit("Look, I'm not magic. You should pass a valid directory");
 }
 
-$filenameGenerator = new Alex\FilenameGenerator('/\.jsx?$/', true);
+$unusedImportGenerator = new Alex\UnusedImportGenerator();
 
-$generator = $filenameGenerator->recurseFiles($rootDir);
+$generator = $unusedImportGenerator->generateUnusedImportIdentifiers($rootDir);
 
 $fileCount = 0;
 $unusedImportCount = 0;
+$unusedImportsByFile = [];
 
-foreach ($generator as $filename) {
+foreach ($generator as $item) {
+    $filename = $item['filename'];
+    $unusedImports = $item['unusedIdentifiers'];
 
-    verbose("Testing $filename.");
-
-    $es6source = file_get_contents($filename);
-
-    if ($es6source === false) {
-        trigger_error("Could not get contents $filename");
-        continue;
+    if (OUTPUT === 'JSON') {
+        $unusedImportsByFile[$filename] = $unusedImports;
     }
 
-    $unusedImports = getUnusedImports($es6source);
-
-    if (!$unusedImports) {
-        continue;
+    if (OUTPUT === 'BASIC') {
+        $unusedImportsString = implode(', ', $unusedImports);
+        echo "$filename > $unusedImportsString\n";
     }
 
     $fileCount++;
     $unusedImportCount += count($unusedImports);
-
-    $unusedImportsString = implode(', ', $unusedImports);
-    echo "$filename > $unusedImportsString\n";
 }
 
-echo "\nTotal number of files with unused imports: $fileCount\n";
-echo "Total number of unused imports from all files: $unusedImportCount\n";
+switch (OUTPUT) {
+    case 'JSON':
+        echo json_encode([
+            'unusedImports' => $unusedImportsByFile,
+            'totalUnusedFiles' => $fileCount,
+            'totalUnusedIdentifiers' => $unusedImportCount,
+        ]);
+        break;
+    case 'BASIC':
+        echo "\nTotal number of files with unused imports: $fileCount\n";
+        echo "Total number of unused imports from all files: $unusedImportCount\n";
+        break;
+}
 
 exit(0);
-
-// returns array of unused import strings, or null if none could be found
-function getUnusedImports($es6source)
-{
-    $unusedDetector = new Alex\UnusedEs6Detector();
-
-    $importStatements = $unusedDetector->matchImportStatements($es6source);
-
-    if (!$importStatements) {
-        verbose("No imports found");
-    }
-
-    $importCount = count($importStatements);
-    verbose("Found $importCount import lines");
-
-    $importNames = $unusedDetector->getImportIdentifiers($importStatements);
-
-    $importNamesString = implode(' || ', $importNames);
-    verbose("Found $importCount imports: $importNamesString");
-
-    $unusedImports = $unusedDetector->getUnusedIdentifiers($es6source, $importNames);
-
-    if (empty($unusedImports)) {
-        verbose('All imports used');
-        return null;
-    }
-
-    return $unusedImports;
-}
-
-function verbose($msg)
-{
-    if (VERBOSE) echo $msg, "\n";
-}
