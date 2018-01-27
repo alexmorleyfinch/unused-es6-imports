@@ -28,16 +28,17 @@ class ImportStatementParser extends Parser
 
         $this->expectControl('import', $token);
 
-        $this->recursiveParse();
+        $this->recursiveOuterComma();
     }
 
-    private function recursiveParse() {
+    // keep accepting tokens and commas until the 'from' keyword
+    private function recursiveOuterComma() {
         $token = $this->tokeniser->nextToken();
 
         if ($token->equalsType(Token::T_IDENTIFIER)) {
             $this->importStatement->setDefaultImport($token->getValue());
         } else if ($token->isControl('{')) {
-            $this->parseNamedImports($this->tokeniser);
+            $this->recursiveInnerComma($this->tokeniser);
 
             // by now we have consumed the close tag '}'
         } else if ($token->isControl('*')) {
@@ -56,7 +57,7 @@ class ImportStatementParser extends Parser
         if ($token->isControl(',')) {
             // do this shit again bitch!
 
-            $this->recursiveParse();
+            $this->recursiveOuterComma();
         } else if ($token->isControl('from')) {
             // an end is in sight!!!
             // right now we know the tokeniser is shit and classifies the "module-name"; as a T_REF, and that's okay
@@ -68,7 +69,8 @@ class ImportStatementParser extends Parser
         }
     }
 
-    private function parseNamedImports($tokeniser)
+    // keep accepting tokens and commas until the '}' keyword
+    private function recursiveInnerComma($tokeniser)
     {
         $token = $this->tokeniser->nextToken();
         $this->expectType(Token::T_IDENTIFIER, $token);
@@ -91,7 +93,7 @@ class ImportStatementParser extends Parser
         }
 
         if ($token->isControl(',')) {
-            return $this->parseNamedImports($tokeniser);
+            return $this->recursiveInnerComma($tokeniser);
         } else if ($token->isControl('}')) {
             return null;
         } else {
