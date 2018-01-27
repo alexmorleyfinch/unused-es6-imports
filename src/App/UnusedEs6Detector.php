@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 class UnusedEs6Detector
 {
     public function matchImportStatements(string $es6source): ?array

@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 class FilenameGenerator
 {
     private $fileRegex;

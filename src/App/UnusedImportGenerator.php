@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 class UnusedImportGenerator
 {
     private $unusedDetector;
