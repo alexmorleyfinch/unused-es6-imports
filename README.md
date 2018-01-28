@@ -1,6 +1,6 @@
 # Unused ES6 Imports
 
-This package detects any unused [es6 style imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
+This super fast package detects any unused [es6 style imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 
 ### Basic usage
 
