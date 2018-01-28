@@ -18,6 +18,7 @@ class UnusedImportRunner
      * Allows us to run the UnusedImportGenerator as a stream of data or synchronously
      *
      * @param string $rootDir
+     * @param UnusedImportGenerator $unusedImportGenerator
      */
     public function __construct(string $rootDir, UnusedImportGenerator $unusedImportGenerator)
     {
