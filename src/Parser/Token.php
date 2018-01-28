@@ -21,7 +21,6 @@ class Token
     private $value;
 
     /**
-     * Token constructor.
      * @param string $value
      * @param int $type
      */

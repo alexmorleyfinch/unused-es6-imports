@@ -14,6 +14,9 @@ class ImportStatementParser
      */
     private $importStatement;
 
+    /**
+     * @param Tokeniser $tokeniser
+     */
     public function __construct(Tokeniser $tokeniser)
     {
         $this->tokeniser = $tokeniser;

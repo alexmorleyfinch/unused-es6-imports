@@ -18,12 +18,16 @@ class UnusedImportGenerator
      */
     private $filenameGenerator;
 
-    public function __construct()
+    /**
+     * @var Models\StatementFactory
+     */
+    private $statementFactory;
+
+    public function __construct(Parser\ImportStatementParser $parser, Utils\FilenameGenerator $filenameGenerator, Models\StatementFactory $factory)
     {
-        $this->parser = new Parser\ImportStatementParser(
-            new Parser\Tokeniser(['import', 'from', 'as', '*', '{', '}', ','])
-        );
-        $this->filenameGenerator = new Utils\FilenameGenerator('/\.jsx?$/', true);
+        $this->parser = $parser;
+        $this->filenameGenerator = $filenameGenerator;#
+        $this->statementFactory = $factory;
     }
 
     /**
@@ -91,7 +95,7 @@ class UnusedImportGenerator
         $importNames = [];
 
         foreach ($importStatements as $idx => $importCode) {
-            $importStatement = new Models\ImportStatement();
+            $importStatement = $this->statementFactory->importStatement();
 
             $this->parser->parse($importCode, $importStatement);
 

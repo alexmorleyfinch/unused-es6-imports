@@ -14,6 +14,10 @@ class FilenameGenerator
      */
     private $recurseDirectories;
 
+    /**
+     * @param string $fileRegex
+     * @param bool $recurseDirectories
+     */
     public function __construct(string $fileRegex = '', bool $recurseDirectories = false)
     {
         $this->fileRegex = $fileRegex;
