@@ -20,11 +20,18 @@ $passCases = [
 $failCases = [
 ];
 
-$parser = new Almofi\UnusedEs6Imports\App\ImportStatementParser();
+use Almofi\UnusedEs6Imports\Parser;
+use Almofi\UnusedEs6Imports\Models;
+
+$parser = new Parser\ImportStatementParser(
+    new Parser\Tokeniser(['import', 'from', 'as', '*', '{', '}', ','])
+);
 
 foreach ($passCases as $code => $expecting) {
-    $parser->reset($code);
-    $answer = $parser->getImportIdentifiers();
+    $importStatement = new Models\ImportStatement();
+
+    $parser->parse($code, $importStatement);
+    $answer = $importStatement->getNamedImports();
 
     $isExpected = empty(array_diff($answer, $expecting)) && empty(array_diff($expecting, $answer));
 
