@@ -4,26 +4,23 @@ namespace Almofi\UnusedEs6Imports\App;
 
 class UnusedImportRunner
 {
-    private $generator;
+    private $rootDir;
+    private $unusedImportGenerator;
 
     public function __construct(string $rootDir)
     {
-        $this->reset($rootDir);
-    }
-
-    public function reset(string $rootDir)
-    {
-        $unusedImportGenerator = new UnusedImportGenerator();
-
-        $this->generator = $unusedImportGenerator->generateUnusedImportIdentifiers($rootDir);
+        $this->rootDir = $rootDir;
+        $this->unusedImportGenerator = new UnusedImportGenerator();
     }
 
     public function streamOutput($stream, callable $toString)
     {
+        $generator = $this->unusedImportGenerator->generateUnusedImportIdentifiers($this->rootDir);
+
         $fileCount = 0;
         $unusedImportCount = 0;
 
-        foreach ($this->generator as $result) {
+        foreach ($generator as $result) {
             $fileCount++;
             $unusedImportCount += count($result['unusedIdentifiers']);
 
@@ -36,11 +33,13 @@ class UnusedImportRunner
 
     public function synchronousOutput()
     {
+        $generator = $this->unusedImportGenerator->generateUnusedImportIdentifiers($this->rootDir);
+
         $fileCount = 0;
         $unusedImportCount = 0;
         $unusedImportsByFile = [];
 
-        foreach ($this->generator as $result) {
+        foreach ($generator as $result) {
             $unusedImports = $result['unusedIdentifiers'];
 
             $fileCount++;

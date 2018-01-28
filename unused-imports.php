@@ -22,9 +22,7 @@ if ($useJson) {
     echo json_encode($jsonData);
 } else {
     $unusedImportsRunner->streamOutput(STDOUT, function($result) {
-        $unusedImportsString = implode(', ', $result['unusedIdentifiers']);
-
-        return "{$result['filename']} > $unusedImportsString";
+        return $result['filename'] . ' > ' . implode(', ', $result['unusedIdentifiers']);
     });
 }
 

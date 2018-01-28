@@ -69,7 +69,7 @@ class UnusedImportGenerator
         $importNames = [];
 
         foreach ($importStatements as $idx => $importCode) {
-            $this->parser->reset($importCode);
+            $this->parser->parse($importCode);
 
             $importNames = array_merge($importNames, $this->parser->getImportIdentifiers());
         }

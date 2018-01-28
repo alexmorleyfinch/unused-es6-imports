@@ -4,8 +4,13 @@ namespace Almofi\UnusedEs6Imports\Parser;
 
 use Almofi\UnusedEs6Imports\Models;
 
-class ImportStatementParser extends Parser
+class ImportStatementParser
 {
+    /**
+     * @var Tokeniser
+     */
+    protected $tokeniser;
+
     /**
      * @var Models\ImportStatement
      */
@@ -13,7 +18,7 @@ class ImportStatementParser extends Parser
 
     public function __construct()
     {
-        parent::__construct(new Tokeniser(['import', 'from', 'as', '*', '{', '}', ',']));
+        $this->tokeniser = new Tokeniser(['import', 'from', 'as', '*', '{', '}', ',']);
     }
 
     public function getImportIdentifiers(): array
@@ -22,8 +27,10 @@ class ImportStatementParser extends Parser
     }
 
     // called from parent when `reset`
-    protected function parse()
+    public function parse(string $code)
     {
+        $this->tokeniser->reset($code);
+
         $this->importStatement = new Models\ImportStatement();
 
         $token = $this->tokeniser->nextToken();
@@ -100,6 +107,20 @@ class ImportStatementParser extends Parser
             return null;
         } else {
             throw new ParseError('Expecting a comma, a closing brace or the "as" keyword');
+        }
+    }
+
+    private function expectType(int $type, Token $token)
+    {
+        if (!$token->equalsType($type)) {
+            throw new ParseError("Expecting type $type");
+        }
+    }
+
+    private function expectControl(string $word, Token $token)
+    {
+        if (!$token->isControl($word)) {
+            throw new ParseError("Expecting keyword $word");
         }
     }
 }
