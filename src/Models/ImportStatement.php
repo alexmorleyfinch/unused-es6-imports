@@ -3,24 +3,40 @@
 namespace Almofi\UnusedEs6Imports\Models;
 
 class ImportStatement {
-    private $defaultImport; // you can only have one default import per statement
-    private $namedImports = []; // array of imports that were destructured {foo, blah}
-    private $dependancyName; // the "components/button" or "react-redux" part
+    /**
+     * @var string
+     */
+    private $defaultImport;
+
+    /**
+     * @var string
+     */
+    private $dependancyName;
+
+    /**
+     * @var string
+     */
     private $allAlias;
 
-    public function setDefaultImport($import) {
+    /**
+     * @var array
+     */
+    private $namedImports = [];
+
+
+    public function setDefaultImport(string $import) {
         $this->defaultImport = $import;
     }
 
-    public function setAllAlias($alias) {
+    public function setAllAlias(string $alias) {
         $this->allAlias = $alias;
     }
 
-    public function setDependancyName($dependency) {
+    public function setDependancyName(string $dependency) {
         $this->dependancyName = $dependency;
     }
 
-    public function addNamedImport($import, $alias = null) {
+    public function addNamedImport(string $import, string $alias = null) {
         $this->namedImports[] = ['import' => $import, 'alias' => $alias];
     }
 

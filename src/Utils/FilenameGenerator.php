@@ -4,7 +4,14 @@ namespace Almofi\UnusedEs6Imports\Utils;
 
 class FilenameGenerator
 {
+    /**
+     * @var string
+     */
     private $fileRegex;
+
+    /**
+     * @var bool
+     */
     private $recurseDirectories;
 
     public function __construct(string $fileRegex = '', bool $recurseDirectories = false)
@@ -13,7 +20,11 @@ class FilenameGenerator
         $this->recurseDirectories = $recurseDirectories;
     }
 
-    public function recurseFiles($path)
+    /**
+     * @param string $path
+     * @return \Generator
+     */
+    public function recurseFiles(string $path): \Generator
     {
         foreach (glob("$path/*") as $idx => $filename) {
             if (is_dir($filename) && $filename != '..' && $this->recurseDirectories) {

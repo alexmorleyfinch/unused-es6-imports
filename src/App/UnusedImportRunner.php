@@ -4,15 +4,31 @@ namespace Almofi\UnusedEs6Imports\App;
 
 class UnusedImportRunner
 {
+    /**
+     * @var string
+     */
     private $rootDir;
+
+    /**
+     * @var UnusedImportGenerator
+     */
     private $unusedImportGenerator;
 
+    /**
+     * Allows us to run the UnusedImportGenerator as a stream of data or synchronously
+     *
+     * @param string $rootDir
+     */
     public function __construct(string $rootDir)
     {
         $this->rootDir = $rootDir;
         $this->unusedImportGenerator = new UnusedImportGenerator();
     }
 
+    /**
+     * @param $stream // a resource like STDOUT or fopen('myfile')
+     * @param callable $toString
+     */
     public function streamOutput($stream, callable $toString)
     {
         $generator = $this->unusedImportGenerator->generateUnusedImportIdentifiers($this->rootDir);

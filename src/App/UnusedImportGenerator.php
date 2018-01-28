@@ -7,7 +7,14 @@ use Almofi\UnusedEs6Imports\Parser;
 
 class UnusedImportGenerator
 {
+    /**
+     * @var Parser\ImportStatementParser
+     */
     private $parser;
+
+    /**
+     * @var Utils\FilenameGenerator
+     */
     private $filenameGenerator;
 
     public function __construct()
@@ -16,7 +23,11 @@ class UnusedImportGenerator
         $this->filenameGenerator = new Utils\FilenameGenerator('/\.jsx?$/', true);
     }
 
-    public function generateUnusedImportIdentifiers($rootDir)
+    /**
+     * @param string $rootDir
+     * @return \Generator
+     */
+    public function generateUnusedImportIdentifiers(string $rootDir): \Generator
     {
         $generator = $this->filenameGenerator->recurseFiles($rootDir);
 
@@ -48,6 +59,10 @@ class UnusedImportGenerator
         }
     }
 
+    /**
+     * @param string $es6source
+     * @return array
+     */
     private function matchImportStatements(string $es6source): array
     {
         $matchCount = preg_match_all('/^\s*(import[\sA-Za-z0-9_\{\,\}]+from.+;)\s*$/m', $es6source, $matches);
@@ -64,6 +79,10 @@ class UnusedImportGenerator
         return $matches[0];
     }
 
+    /**
+     * @param array $importStatements
+     * @return array
+     */
     private function getImportIdentifiers(array $importStatements): array
     {
         $importNames = [];
@@ -77,6 +96,11 @@ class UnusedImportGenerator
         return $importNames;
     }
 
+    /**
+     * @param string $es6source
+     * @param array $importNames
+     * @return array
+     */
     private function getUnusedIdentifiers(string $es6source, array $importNames): array
     {
         $unusedImports = [];
@@ -89,7 +113,7 @@ class UnusedImportGenerator
             }
 
             if ($matchCount === 1) {
-                $unusedImports [] = $importName;
+                $unusedImports[] = $importName;
             }
         }
 

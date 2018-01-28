@@ -6,12 +6,34 @@ namespace Almofi\UnusedEs6Imports\Parser;
 
 class Tokeniser
 {
+    /**
+     * @var string
+     */
     private $string;
+
+    /**
+     * @var string
+     */
     private $source;
+
+    /**
+     * @var int
+     */
     private $position;
+
+    /**
+     * @var array
+     */
     private $controlChars;
+
+    /**
+     * @var array
+     */
     private $controlWords;
 
+    /**
+     * @param array $controlStrings
+     */
     public function __construct(array $controlStrings = []) {
         foreach ($controlStrings as $word) {
             $wordLen = strlen($word);
@@ -23,12 +45,18 @@ class Tokeniser
         }
     }
 
-    public function reset($importString)
+    /**
+     * @param string $importString
+     */
+    public function reset(string $importString)
     {
         $this->position = 0;
         $this->source = $importString;
     }
 
+    /**
+     * @return Token|null
+     */
     public function nextToken(): ?Token
     {
         $this->skipSpaces();
@@ -48,7 +76,11 @@ class Tokeniser
         return $this->buildString($nextChar);
     }
 
-    private function buildString($firstChr): Token
+    /**
+     * @param string $firstChr
+     * @return Token
+     */
+    private function buildString(string $firstChr): Token
     {
         $this->string = $firstChr;
         $this->position++; // we already have the first character;
