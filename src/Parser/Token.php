@@ -1,6 +1,6 @@
 <?php
 
-namespace Almofi\UnusedEs6Imports\App;
+namespace Almofi\UnusedEs6Imports\Parser;
 
 class Token {
     const T_CONTROL = 1;

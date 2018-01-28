@@ -1,6 +1,6 @@
 <?php
 
-namespace Almofi\UnusedEs6Imports\App;
+namespace Almofi\UnusedEs6Imports\Parser;
 
 // TODO detect string literal
 
@@ -68,7 +68,7 @@ class Tokeniser
             return new Token($this->string, Token::T_CONTROL);
         }
 
-        return new Token($this->string, TOKEN::T_IDENTIFIER);
+        return new Token($this->string, Token::T_IDENTIFIER);
     }
 
     private function skipSpaces()

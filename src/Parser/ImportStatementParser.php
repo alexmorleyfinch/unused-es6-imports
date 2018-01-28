@@ -1,11 +1,13 @@
 <?php
 
-namespace Almofi\UnusedEs6Imports\App;
+namespace Almofi\UnusedEs6Imports\Parser;
+
+use Almofi\UnusedEs6Imports\Models;
 
 class ImportStatementParser extends Parser
 {
     /**
-     * @var ImportStatement
+     * @var Models\ImportStatement
      */
     private $importStatement;
 
@@ -22,7 +24,7 @@ class ImportStatementParser extends Parser
     // called from parent when `reset`
     protected function parse()
     {
-        $this->importStatement = new ImportStatement();
+        $this->importStatement = new Models\ImportStatement();
 
         $token = $this->tokeniser->nextToken();
 
