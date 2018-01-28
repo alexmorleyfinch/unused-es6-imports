@@ -2,10 +2,6 @@
 
 namespace Almofi\UnusedEs6Imports\App;
 
-use Almofi\UnusedEs6Imports\Utils;
-use Almofi\UnusedEs6Imports\Parser;
-use Almofi\UnusedEs6Imports\Models;
-
 class UnusedImportRunner
 {
     /**
@@ -23,16 +19,10 @@ class UnusedImportRunner
      *
      * @param string $rootDir
      */
-    public function __construct(string $rootDir)
+    public function __construct(string $rootDir, UnusedImportGenerator $unusedImportGenerator)
     {
         $this->rootDir = $rootDir;
-        $this->unusedImportGenerator = new UnusedImportGenerator(
-            new Parser\ImportStatementParser(
-                new Parser\Tokeniser(['import', 'from', 'as', '*', '{', '}', ','])
-            ),
-            new Utils\FilenameGenerator('/\.jsx?$/', true),
-            new Models\StatementFactory()
-        );
+        $this->unusedImportGenerator = $unusedImportGenerator;
     }
 
     /**

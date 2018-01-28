@@ -2,8 +2,6 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use \Almofi\UnusedEs6Imports\App;
-
 // requires -f arg as filename and optional -j to enable json output
 $options = getopt('f:j::');
 $rootDir = $options['f'] ?? null;
@@ -14,7 +12,9 @@ if (!is_string($rootDir) || !is_dir($rootDir)) {
     exit(1);
 }
 
-$unusedImportsRunner = new App\UnusedImportRunner($rootDir);
+$container = new Almofi\UnusedEs6Imports\Container();
+
+$unusedImportsRunner = $container->getUnusedImportRunner($rootDir);
 
 if ($useJson) {
     $jsonData = $unusedImportsRunner->synchronousOutput();
