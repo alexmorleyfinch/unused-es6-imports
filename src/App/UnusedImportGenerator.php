@@ -3,6 +3,7 @@
 namespace Almofi\UnusedEs6Imports\App;
 
 use Almofi\UnusedEs6Imports\Utils;
+use Almofi\UnusedEs6Imports\Models;
 use Almofi\UnusedEs6Imports\Parser;
 
 class UnusedImportGenerator
@@ -19,7 +20,9 @@ class UnusedImportGenerator
 
     public function __construct()
     {
-        $this->parser = new Parser\ImportStatementParser();
+        $this->parser = new Parser\ImportStatementParser(
+            new Parser\Tokeniser(['import', 'from', 'as', '*', '{', '}', ','])
+        );
         $this->filenameGenerator = new Utils\FilenameGenerator('/\.jsx?$/', true);
     }
 
@@ -88,9 +91,11 @@ class UnusedImportGenerator
         $importNames = [];
 
         foreach ($importStatements as $idx => $importCode) {
-            $this->parser->parse($importCode);
+            $importStatement = new Models\ImportStatement();
 
-            $importNames = array_merge($importNames, $this->parser->getImportIdentifiers());
+            $this->parser->parse($importCode, $importStatement);
+
+            $importNames = array_merge($importNames, $importStatement->getNamedImports());
         }
 
         return $importNames;

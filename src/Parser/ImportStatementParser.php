@@ -2,8 +2,6 @@
 
 namespace Almofi\UnusedEs6Imports\Parser;
 
-use Almofi\UnusedEs6Imports\Models;
-
 class ImportStatementParser
 {
     /**
@@ -12,26 +10,21 @@ class ImportStatementParser
     protected $tokeniser;
 
     /**
-     * @var Models\ImportStatement
+     * @var Es6ImportInterface
      */
     private $importStatement;
 
-    public function __construct()
+    public function __construct(Tokeniser $tokeniser)
     {
-        $this->tokeniser = new Tokeniser(['import', 'from', 'as', '*', '{', '}', ',']);
-    }
-
-    public function getImportIdentifiers(): array
-    {
-        return $this->importStatement->getNamedImports();
+        $this->tokeniser = $tokeniser;
     }
 
     // called from parent when `reset`
-    public function parse(string $code)
+    public function parse(string $code, Es6ImportInterface $importStatement)
     {
         $this->tokeniser->reset($code);
 
-        $this->importStatement = new Models\ImportStatement();
+        $this->importStatement = $importStatement;
 
         $token = $this->tokeniser->nextToken();
 

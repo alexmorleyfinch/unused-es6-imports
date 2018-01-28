@@ -2,7 +2,10 @@
 
 namespace Almofi\UnusedEs6Imports\Models;
 
-class ImportStatement {
+use Almofi\UnusedEs6Imports\Parser;
+
+class ImportStatement implements Parser\Es6ImportInterface
+{
     /**
      * @var string
      */
@@ -23,26 +26,33 @@ class ImportStatement {
      */
     private $namedImports = [];
 
-
-    public function setDefaultImport(string $import) {
+    public function setDefaultImport(string $import)
+    {
         $this->defaultImport = $import;
     }
 
-    public function setAllAlias(string $alias) {
+    public function setAllAlias(string $alias)
+    {
         $this->allAlias = $alias;
     }
 
-    public function setDependancyName(string $dependency) {
+    public function setDependancyName(string $dependency)
+    {
         $this->dependancyName = $dependency;
     }
 
-    public function addNamedImport(string $import, string $alias = null) {
+    public function addNamedImport(string $import, string $alias = null)
+    {
         $this->namedImports[] = ['import' => $import, 'alias' => $alias];
     }
 
-    public function getNamedImports() {
+    /**
+     * @return array
+     */
+    public function getNamedImports(): array
+    {
         return array_merge(
-            array_map(function($item) {
+            array_map(function ($item) {
                 return $item['alias'] ?: $item['import'];
             }, $this->namedImports),
             array_filter([$this->defaultImport, $this->allAlias])
