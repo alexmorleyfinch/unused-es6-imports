@@ -19,7 +19,7 @@ $unusedImportsRunner = $container->getUnusedImportRunner($rootDir);
 if ($useJson) {
     $jsonData = $unusedImportsRunner->synchronousOutput();
 
-    echo json_encode($jsonData);
+    echo json_encode($jsonData), "\n";
 } else {
     $unusedImportsRunner->streamOutput(STDOUT, function($result) {
         return $result['filename'] . ' > ' . implode(', ', $result['unusedIdentifiers']);
